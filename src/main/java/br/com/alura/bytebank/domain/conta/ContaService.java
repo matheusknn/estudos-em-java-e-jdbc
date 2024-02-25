@@ -1,13 +1,20 @@
 package br.com.alura.bytebank.domain.conta;
 
+import br.com.alura.bytebank.ConectionFactory;
 import br.com.alura.bytebank.domain.RegraDeNegocioException;
 import br.com.alura.bytebank.domain.cliente.Cliente;
 
 import java.math.BigDecimal;
+import java.sql.Connection;
 import java.util.HashSet;
 import java.util.Set;
 
 public class ContaService {
+
+    private ConectionFactory connection;
+    public ContaService() {
+        this.connection = new ConectionFactory();
+    }
 
     private Set<Conta> contas = new HashSet<>();
 
