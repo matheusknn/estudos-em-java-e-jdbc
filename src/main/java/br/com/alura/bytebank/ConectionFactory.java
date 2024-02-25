@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class ConectionFactory {
 
-    public Connection RecuperarConexaoComOBanco() {
+    public Connection recuperarConexaoComOBanco() {
         try {
             return DriverManager
                     .getConnection("jdbc:mysql://localhost:3306/byte_bank?user=root&password=m4th3us1");//abrindo conexão com o banco

@@ -3,9 +3,12 @@ package br.com.alura.bytebank.domain.conta;
 import br.com.alura.bytebank.ConectionFactory;
 import br.com.alura.bytebank.domain.RegraDeNegocioException;
 import br.com.alura.bytebank.domain.cliente.Cliente;
+import com.mysql.cj.xdevapi.PreparableStatement;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,7 +37,22 @@ public class ContaService {
             throw new RegraDeNegocioException("Já existe outra conta aberta com o mesmo número!");
         }
 
-        contas.add(conta);
+        String sql = "INSERT INTO conta (numero, saldo, cliente_nome, cliente_cpf, cliente_email)" +
+                "VALUES(?,?,?,?,?)";
+
+        try{
+            Connection conn = connection.recuperarConexaoComOBanco();
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.setInt(1, conta.getNumero()); //primeiro interrogação
+            preparedStatement.setBigDecimal(2, BigDecimal.ZERO);//segunda interrogação
+            preparedStatement.setString(3, dadosDaConta.dadosCliente().nome());
+            preparedStatement.setString(4, dadosDaConta.dadosCliente().cpf());
+            preparedStatement.setString(5, dadosDaConta.dadosCliente().email());
+
+            preparedStatement.execute();
+        }catch (SQLException e) {
+            System.out.println(e);
+        }
     }
 
     public void realizarSaque(Integer numeroDaConta, BigDecimal valor) {
